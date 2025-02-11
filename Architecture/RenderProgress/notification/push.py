@@ -2,28 +2,33 @@
 ## -*- coding: cp1252 -*-
 
 import os
+import sys
 import json
 import datetime
 
-from smtplib import SMTP
+from smtplib import SMTP_SSL as SMTP
+from typing import final
 
 class email:
     def __init__(self, key_path) -> None:
 
         with open(key_path, 'r') as file:
             self.credential = json.load(file)
-            self.smtp = SMTP()
+
+        self.smtp = SMTP(self.credential['server'])
 
 
     def configure_smtp(self) -> None:
 
-        self.smtp.set_debuglevel(0)
-        
-        self.smtp.connect(self.credential['server'], 
-                          self.credential['port'])
+        try:
 
-        self.smtp.login(self.credential['address'],
-                        self.credential['key'])
+            self.smtp.set_debuglevel(False)
+            
+            self.smtp.login(self.credential['address'],
+                            self.credential['password'])
+        except Exception as e:
+            error = e.message
+            error.capitalize()
 
 
     def create_message(self) -> str:
@@ -46,15 +51,18 @@ class email:
 
 
     def send_message(self, message) -> None:
-        try:
-            self.smtp.sendemail(self.credential['from'],
-                                self.credential['from'],
-                                message)
 
+        try:
+            self.smtp.sendmail(self.credential['from'],
+                                self.credential['to'],
+                                message.encode('utf-8'))
+
+        except Exception as error:
+            raise Exception('Erro ao enviar e-mail')
+
+        finally:
             self.smtp.quit()
 
-        except:
-            raise Exception('Erro ao enviar e-mail')
 
 
         

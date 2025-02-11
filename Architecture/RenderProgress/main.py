@@ -9,7 +9,8 @@ from sketchup.search_process import vray
 from notification.push import email
 
 image_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'image', 'finished_message.png')
-key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'keys', 'CREDENTIALS.json')
+# key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'keys', 'CREDENTIALS.json')
+key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Example keys', 'EXAMPLE_CREDENTIAL.json')
 
 def message_initial():
     print('---------------------------------')
@@ -35,6 +36,9 @@ if __name__ == "__main__":
 
         locate = interface.try_located()
                 
+    print('')
+    print('--- Render Finalizado ---')
+    print('')
 
     notification = email(key_path)
 
@@ -43,6 +47,11 @@ if __name__ == "__main__":
     message = notification.create_message()
 
     notification.send_message(message)
+
+    print('')
+    print('--- E-mail de notificação enviado! ---')
+    print('')
+
 
 
 
