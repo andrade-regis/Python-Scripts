@@ -9,46 +9,27 @@ class vray:
 
         self.image_path = image_path
 
-    def message_progress(self):
+    def message_searching_on_screen(self):
         print('')
         print('--- Procurando no V-ray ---')
         print('')
 
-
-    def finished(self) -> bool:
-        
-        try:
-            location = pyauto.locateOnScreen(self.image_path, confidence=0.9)
-        
-        except pyauto.ImageNotFoundException:
-            location = None
-
-        return location
+    def message_waiting(self):
+        print('')
+        print('--- Aguardando Finalização ---')
+        print('')
 
 
     def try_located(self):
+        
+        try:
+            location = pyauto.locateOnScreen(self.image_path, confidence=0.9)
+                    
+        except:
+            location = None
 
-        self.message_progress()
 
-        locate = None
-
-        while locate == None:
-            
-            locate = self.finished()
-            
-            if locate:
-                print('')
-                print('--- Render Finalizado ---')
-                print('')
-
-                pyauto.click(locate)
-            
-            else:
-                print('')
-                print('--- Render em Andamento ---')
-                print('')
-
-                time.sleep(5)
+        return location
 
 
 
